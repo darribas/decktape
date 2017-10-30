@@ -3,14 +3,14 @@
 import subprocess as sub
 import sys, os
 
-dir = sub.Popen(['which', 'decktape'], stdout=sub.PIPE)\
-         .communicate()[0]\
-         .strip('\n')\
-         .replace('//decktape', '/')
-
 args = sys.argv
 if len(args)>1:
-    cmd = '%s/bin/phantomjs %s/decktape.js '%(dir, dir) + ' '.join(args[1:])
+    other = args[1:-2]
+    input = args[-2]
+    output = args[-1]
+    cmd = ('docker run --rm -v `pwd`:`pwd` -w `pwd` astefanutti/decktape ' \
+            '%s file://`pwd`/%s `pwd`/%s'\
+           %(' '.join(other), input, output))
     print cmd
     os.system(cmd)
 else:
